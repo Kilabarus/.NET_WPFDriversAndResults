@@ -1,0 +1,121 @@
+﻿<Window x:Class="WPFDriversAndResults.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFDriversAndResults"
+        xmlns:converters="clr-namespace:WPFDriversAndResults.Converters"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="1150"
+        
+        Background="LightGray">
+
+    <Window.Resources>
+        <ResourceDictionary Source="Resources/MainWindowResources.xaml"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Row="0" Grid.Column="0" 
+                Style="{StaticResource dgBorderStyle}">
+            <DataGrid Style="{StaticResource dgStyle}"
+                      IsReadOnly="True"
+                      ItemsSource="{Binding DCResultList}"
+                      SelectedItem="{Binding SelectedDCResult}" IsSynchronizedWithCurrentItem="True"
+                      
+                      ColumnHeaderStyle="{StaticResource dgColumnHeaderStyle}"
+                      RowStyle="{StaticResource dgRowStyle}"
+                      CellStyle="{StaticResource dgCellStyle}">
+                <DataGrid.GroupStyle>
+                    <GroupStyle ContainerStyle="{StaticResource GroupStyle}"/>
+                </DataGrid.GroupStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn CellStyle="{StaticResource dgFirstCellStyle}"                                        
+                                        Binding="{Binding Path=Year}" 
+                                        Header="Сезон" 
+                                        CanUserResize="False" CanUserReorder="True"
+                                        Width="Auto"
+                                        FontWeight="Bold">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn CellStyle="{StaticResource dgTextCellStyle}"
+                                        ElementStyle="{StaticResource dgColumnElementStyle}"
+                                        Binding="{Binding Path=RacingSeries, Converter={StaticResource RacingSeriesEnumToStringConverter}}"
+                                        Header="Гоночная серия"                                        
+                                        CanUserResize="False" CanUserReorder="True"
+                                        Width="Auto">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn CellStyle="{StaticResource dgTextCellStyle}"
+                                        ElementStyle="{StaticResource dgColumnElementStyle}"
+                                        Binding="{Binding Path=DriverFullName}" 
+                                        Header="Пилот" 
+                                        CanUserResize="False" CanUserReorder="True"
+                                        Width="Auto">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn CellStyle="{StaticResource dgTextCellStyle}"
+                                        ElementStyle="{StaticResource dgColumnElementStyle}"
+                                        Binding="{Binding Path=Team, Converter={StaticResource TeamToStringConverter}}"
+                                        Header="Команда" 
+                                        CanUserResize="False" CanUserReorder="True"
+                                        Width="Auto">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Path=Wins}" 
+                                        Header="Победы" 
+                                        CanUserResize="False" CanUserReorder="True"
+                                        Width="Auto">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Path=Points}" 
+                                        Header="Очки" 
+                                        CanUserResize="False" CanUserReorder="True"
+                                        Width="Auto">
+                    </DataGridTextColumn>
+                    <DataGridTextColumn CellStyle="{StaticResource dgLastCellStyle}"
+                                        Binding="{Binding Path=Place}" 
+                                        Header="Место" 
+                                        CanUserResize="False" CanUserReorder="True"
+                                        Width="Auto">
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <Border Grid.Row="0" Grid.Column="1"
+                Style="{StaticResource pnlBorderStyle}">
+            <StackPanel Style="{StaticResource pnlStyle}">
+                <TextBlock Text="Группировка"                       
+                           Style="{StaticResource tblGroupingStyle}"/>
+
+                <CheckBox Style="{StaticResource cbStyle}"                          
+                          IsChecked="{Binding IsGroupedByDrivers}">
+                    <TextBlock Style="{StaticResource tblNextToCB}"
+                               Text="По пилотам"/>
+                </CheckBox>
+                <CheckBox Style="{StaticResource cbStyle}"                          
+                          IsChecked="{Binding IsGroupedByRacingSeries}">
+                    <TextBlock Style="{StaticResource tblNextToCB}"
+                               Text="По гоночным сериям"/>
+                </CheckBox>
+
+                <TextBlock Style="{StaticResource tblFirstHeader}"
+                           Text="Пилот"/>
+                <TextBox Style="{StaticResource tbStyle}" 
+                         Text="{Binding SelectedDCResult.DriverFullName}"/>
+                <TextBlock Style="{StaticResource tblHeader}"
+                           Text="Чемпионат"/>
+                <TextBox Style="{StaticResource tbStyle}" 
+                         Text="{Binding SelectedDCResult.RacingSeries}"/>
+                <TextBlock Style="{StaticResource tblHeader}"
+                           Text="Сезон"/>
+                <TextBox Style="{StaticResource tbStyle}" 
+                         Text="{Binding SelectedDCResult.Year}"/>
+
+                <Button Style="{StaticResource btnDelete}" 
+                        Content="Удалить"
+                        Command="{Binding DeleteCommand}" CommandParameter="{Binding SelectedDCResult}"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
